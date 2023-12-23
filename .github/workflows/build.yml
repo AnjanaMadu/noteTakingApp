@@ -1,36 +1,27 @@
-name: Build Flutter APK and Upload Artifact
+name: Flutter Build APK
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main # Trigger on pushes to the 'main' branch
+on: [push, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Use an Ubuntu VM for building
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up Java SDK
-      uses: actions/setup-java@v2
+    - uses: actions/setup-java@v1
       with:
-        java-version: '11' # Adjust based on your project's requirements
+        java-version: '12.x'
 
-    - name: Set up Flutter SDK
-      uses: subosito/flutter-action@v2
+    - uses: subosito/flutter-action@v1
       with:
-        flutter-version: '3.0.2' # Adjust based on your project's requirements
+        flutter-version: '2.x'
 
-    - name: Get dependencies
-      run: flutter pub get
+    - run: flutter pub get
 
-    - name: Build APK
-      run: flutter build apk --no-run
+    - run: flutter build apk --release
 
-    - name: Upload APK as build artifact
-      uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2
       with:
-        path: build/app/outputs/flutter/release/app-release.apk
+        name: app-release
+        path: build/app/outputs/flutter-apk/app-release.apk
