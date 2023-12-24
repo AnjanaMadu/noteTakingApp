@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'screens/home.dart';
 import 'screens/login.dart';
 import 'screens/new_note.dart';
+import 'screens/update_note.dart';
 // ...
 
 void main() async {
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => Login(),
         '/home': (context) => Home(),
-        '/new-note': (context) => NewNote(),
+        '/new': (context) => NewNote(),
+        '/update': (context) => UpdateNote(),
       },
     );
   }

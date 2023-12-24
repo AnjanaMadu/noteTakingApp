@@ -1,22 +1,44 @@
-import 'package:flutter/material.dart';
-import '../shared/notes.dart';
+import 'dart:developer';
 
-class NewNote extends StatefulWidget {
-  const NewNote({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:my_app/shared/notes.dart';
+
+class UpdateNote extends StatefulWidget {
+  final String? title;
+  final String? description;
+  final String? docId;
+
+  const UpdateNote({
+    Key? key,
+    String? this.title,
+    String? this.description,
+    String? this.docId,
+  }) : super(key: key);
 
   @override
-  _NewNoteState createState() => _NewNoteState();
+  _UpdateNoteState createState() => _UpdateNoteState();
 }
 
-class _NewNoteState extends State<NewNote> {
+class _UpdateNoteState extends State<UpdateNote> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    log(widget.docId!);
+    log(widget.title!);
+
+    titleController.text = widget.title!;
+    descriptionController.text = widget.description!;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Note'),
+        title: const Text('Update Note'),
         elevation: 4,
       ),
       body: Container(
@@ -54,15 +76,16 @@ class _NewNoteState extends State<NewNote> {
               descriptionController.text.isEmpty) {
             return;
           }
-          addNote(
+          updateNote(
             title: titleController.text,
             description: descriptionController.text,
+            docId: widget.docId!,
           );
           Navigator.pop(context);
         },
-        tooltip: 'Save Note',
-        label: const Text('Save'),
-        icon: const Icon(Icons.save),
+        tooltip: 'Update Note',
+        label: const Text('Update'),
+        icon: const Icon(Icons.update),
       ),
     );
   }

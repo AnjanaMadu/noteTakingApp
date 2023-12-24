@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../shared/notes.dart';
+import 'update_note.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class Home extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         alignment: Alignment.center,
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('notes').snapshots(),
+          stream: readNotes(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return const Text('Something went wrong');
@@ -35,7 +38,11 @@ class Home extends StatelessWidget {
               children: snapshot.data.docs.map<Widget>((document) {
                 return ListTile(
                   title: Text(document['title']),
-                  subtitle: Text(document['description']),
+                  subtitle: Text(
+                    document['description'],
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
                     onPressed: () async {
@@ -48,14 +55,19 @@ class Home extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   onTap: () {
-                    Navigator.pushNamed(
+                    log(document.id);
+
+                    Navigator.push(
                       context,
-                      '/new-note',
-                      arguments: {
-                        'title': document['title'],
-                        'description': document['description'],
-                        'docId': document.id,
-                      },
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return UpdateNote(
+                            title: document['title'],
+                            description: document['description'],
+                            docId: document.id,
+                          );
+                        },
+                      ),
                     );
                   },
                 );
@@ -66,7 +78,7 @@ class Home extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            Navigator.pushNamed(context, '/new-note');
+            Navigator.pushNamed(context, '/new');
           },
           tooltip: 'New Note',
           icon: const Icon(Icons.add),
