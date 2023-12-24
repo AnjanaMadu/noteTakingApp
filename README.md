@@ -1,6 +1,10 @@
-# my_app
+# Note Taking App
 
 A new Flutter project.
+
+
+![screenshots/Screenshot_2023.12.25_00.25.53.618.png]
+![screenshots/Screenshot_2023.12.25_00.26.02.650.png]
 
 ## Getting Started
 
